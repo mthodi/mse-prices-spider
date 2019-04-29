@@ -3,6 +3,7 @@ import scrapy
 from scrapy.http import Request
 from scrapy.exceptions import CloseSpider
 from datetime import datetime
+import os, sys
 
 class MsePricesSpider(scrapy.Spider):
     name = 'mse_prices'
@@ -12,13 +13,13 @@ class MsePricesSpider(scrapy.Spider):
     def parse(self, response):
         # TODO: verify that it is a daily report
         pdf_url =  response.css("a.btn::attr(href)").extract()[0]
-        with open('latest.txt', 'r') as file: 
+        with open(os.path.join(sys.path[0], 'latest.txt'), 'r') as file: 
             recent_url = file.readline().splitlines()[0]
         if pdf_url == recent_url:
-            with open('status.txt', 'w') as file:
+            with open(os.path.join(sys.path[0],'status.txt'), 'w') as file:
                 file.write('CLOSED')
             raise CloseSpider('No new reports to download')
-        with open('latest.txt', 'w') as file:
+        with open(os.path.join(sys.path[0], 'latest.txt'), 'w') as file:
             file.write(pdf_url)
         yield Request(
             url=pdf_url,
@@ -31,7 +32,7 @@ class MsePricesSpider(scrapy.Spider):
         self.logger.info("[+] Saving report at {}".format(output_file))
         with open(output_file, 'wb') as file:
             file.write(response.body)
-        with open('status.txt', 'w') as file:
+        with open(os.path.join(sys.path[0], 'status.txt'), 'w') as file:
             file.write(output_file)
 
 

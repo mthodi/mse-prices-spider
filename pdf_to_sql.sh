@@ -6,6 +6,7 @@ if ["$#" -ne 1]; then
 fi
 
 if [ -f $1 ]; then
+    cd "${0%/*}"
     # get the basename
     file_basename=`basename ${1} .pdf`
     output_file=${file_basename}".txt"

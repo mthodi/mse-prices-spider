@@ -12,13 +12,14 @@ process.crawl(MsePricesSpider)
 process.start()
 
 # TODO: get the close status of the spider...if closed then quit
-with open('status.txt', 'r') as file:
+with open(os.path.join(sys.path[0], 'status.txt'), 'r') as file:
     status = file.readline().splitlines()[0]
 if status == 'CLOSED':
     sys.exit(-1)
 
 # convert data to PDF
-os.system('./pdf_to_sql.sh {}'.format(status))
+file_path = os.path.join(sys.path[0], status)
+os.system(os.path.join(sys.path[0], 'pdf_to_sql.sh {}'.format(file_path)))
 # load data into database
-sql_file = status.split('.')[0] + '.sql'
-os.system('./insert_into_db.sh {}'.format(sql_file))
+sql_file = file_path.split('.')[0] + '.sql'
+os.system(os.path.join(sys.path[0], 'insert_into_db.sh {}'.format(sql_file)))

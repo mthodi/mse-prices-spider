@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import sys
+import sys, os
 
 class SQL_Encoder():
 
@@ -10,7 +10,7 @@ class SQL_Encoder():
         self.read_file()
     
     def read_file(self):
-        handle =  open(self.file_name, 'r+')
+        handle =  open(os.path.join(sys.path[0], self.file_name), 'r+')
         self.data = handle.readlines()
     
     def get_number_of_fields(self):
