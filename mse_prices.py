@@ -30,7 +30,7 @@ class MsePricesSpider(scrapy.Spider):
         """Saves the downloaded prices PDF"""
         output_file= datetime.today().strftime('daily_%d_%B_%Y.pdf')
         self.logger.info("[+] Saving report at {}".format(output_file))
-        with open(output_file, 'wb') as file:
+        with open(os.path.join(sys.path[0], output_file), 'wb') as file:
             file.write(response.body)
         with open(os.path.join(sys.path[0], 'status.txt'), 'w') as file:
             file.write(output_file)
