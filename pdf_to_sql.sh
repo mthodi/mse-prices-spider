@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ["$#" -ne 1]; then 
+if [ "$#" -ne 1 ]; then 
     echo "[+] Usage $0 <PDF/or/PDF directory/>"
     exit 1
 fi
@@ -68,6 +68,9 @@ if [ -f $1 ]; then
     echo "[+] Cleaning up."
     rm ${tmp_file}
     rm ${csv_file}
+    # Hack
+    sed -i 's/trading_date/exchange_id,trading_date/g' $SQL_FILE
+    sed -i 's/STR_/1,STR_/g' $SQL_FILE
     echo "[+] Done. File is saved as : ${SQL_FILE}"
     exit 0
 fi
